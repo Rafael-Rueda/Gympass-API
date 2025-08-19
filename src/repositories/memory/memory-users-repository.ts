@@ -1,0 +1,64 @@
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error.ts";
+import { type UserData, UsersRepository } from "../users-repository.ts";
+
+// Only repositories make the relation with the database
+
+export class MemoryUsersRepository extends UsersRepository {
+    private users: UserData[] = [];
+
+    async create(data: Pick<UserData, "name" | "email" | "passwordHash">) {
+        const user = {
+            id: crypto.randomUUID(),
+            ...data,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        this.users.push(user);
+        return user;
+    }
+
+    async read() {
+        return this.users;
+    }
+
+    async update(id: string, data: Partial<Pick<UserData, "name" | "email" | "passwordHash">>) {
+        const user = this.users.find((user) => user.id === id);
+        if (!user) {
+            throw new ResourceNotFoundError();
+        }
+
+        Object.assign(user, data);
+
+        return user;
+    }
+
+    async delete(by: { id: string } | { email: string }) {
+        let user: UserData | undefined;
+
+        if ("id" in by) {
+            user = this.users.find((user) => user.id === by.id);
+
+            if (!user) {
+                throw new ResourceNotFoundError();
+            }
+
+            this.users = this.users.filter((u) => u.id !== user!.id);
+        } else {
+            user = this.users.find((user) => user.email === by.email);
+
+            if (!user) {
+                throw new ResourceNotFoundError();
+            }
+
+            this.users = this.users.filter((u) => u.email !== user!.email);
+        }
+
+        return user;
+    }
+
+    async findByEmail(email: UserData["email"]) {
+        const user = this.users.find((user) => user.email === email);
+        return user || null;
+    }
+}

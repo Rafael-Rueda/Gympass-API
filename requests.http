@@ -1,0 +1,11 @@
+POST http://localhost:3333/users
+Content-Type: application/json
+
+{
+    "name": "Rafael Rueda",
+    "email": "rafael.rued4@gmail.com",
+    "password": "123456"
+}
+
+###
+

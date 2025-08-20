@@ -11,6 +11,8 @@ import {
 import z from "zod";
 
 import { env } from "./env/index.ts";
+import { authenticateRoutes } from "./http/routes/authenticate.ts";
+import { InvalidCredentialsError } from "./services/errors/invalid-credentials-error.ts";
 import { ResourceNotFoundError } from "./services/errors/resource-not-found-error.ts";
 import { UserAlreadyExistsError } from "./services/errors/user-already-exists-error.ts";
 import { userRoutes } from "@/http/routes/user-routes.ts";
@@ -45,6 +47,7 @@ z.config(z.locales.en());
 
 // Plugins
 app.register(userRoutes);
+app.register(authenticateRoutes);
 
 // Error handling
 app.setErrorHandler((error, request, reply) => {
@@ -82,6 +85,13 @@ app.setErrorHandler((error, request, reply) => {
         return reply.status(404).send({
             message: error.message,
             error: "ResourceNotFoundError",
+        });
+    }
+
+    if (error instanceof InvalidCredentialsError) {
+        return reply.status(401).send({
+            message: error.message,
+            error: "InvalidCredentialsError",
         });
     }
 

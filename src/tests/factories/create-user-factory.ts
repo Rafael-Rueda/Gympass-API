@@ -9,7 +9,7 @@ export class UserFactory {
     async create(name?: string, email?: string, password?: string) {
         const create = new createUserService(this.usersRepository);
 
-        const user = await create.execute({
+        const { user } = await create.execute({
             name: name ?? "John Doe",
             email: email ?? "john.doe@example.com",
             password: password ?? "123456",
@@ -17,6 +17,6 @@ export class UserFactory {
 
         this.users.push(user);
 
-        return user;
+        return { user };
     }
 }

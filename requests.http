@@ -2,10 +2,17 @@ POST http://localhost:3333/users
 Content-Type: application/json
 
 {
-    "name": "Rafael Rueda",
-    "email": "rafael.rued4@gmail.com",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
     "password": "123456"
 }
 
 ###
 
+POST http://localhost:3333/sessions
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "123456"
+}

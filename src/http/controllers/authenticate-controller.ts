@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
 import { PrismaUsersRepository } from "@/repositories/prisma/prisma-users-repository.ts";
-import { AuthenticateService } from "@/services/authenticate.ts";
+import { AuthenticateService } from "@/services/authenticate-service.ts";
 import type { AuthenticateBody } from "../schemas/authenticate-schema.ts";
 import type { CreateUserBody } from "../schemas/create-user-schema.ts";
 

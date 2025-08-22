@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { MemoryUsersRepository } from "@/repositories/memory/memory-users-repository.ts";
 import { UserAlreadyExistsError } from "@/services/errors/user-already-exists-error.ts";
-import { UserFactory } from "@/tests/factories/create-user-factory.ts";
+import { UserFactory } from "@/tests/factories/create-user-service-factory.ts";
 
 describe("Create user test services", () => {
     it("should hash user password upon registration", async () => {

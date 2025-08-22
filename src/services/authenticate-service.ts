@@ -1,7 +1,7 @@
 import { compare } from "bcryptjs";
 
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error.ts";
-import type { UserData, UsersRepository } from "@/repositories/users-repository.ts";
+import type { User, UsersRepository } from "@/repositories/users-repository.ts";
 
 interface AuthenticateServiceRequest {
     email: string;
@@ -9,14 +9,14 @@ interface AuthenticateServiceRequest {
 }
 
 type AuthenticateServiceResponse = {
-    user: UserData;
+    user: User;
 };
 
 export class AuthenticateService {
-    constructor(private UsersRepository: UsersRepository) {}
+    constructor(private usersRepository: UsersRepository) {}
 
     async execute({ email, password }: AuthenticateServiceRequest): Promise<AuthenticateServiceResponse> {
-        const user = await this.UsersRepository.findByEmail(email);
+        const user = await this.usersRepository.findByEmail(email);
 
         if (!user) {
             throw new InvalidCredentialsError();

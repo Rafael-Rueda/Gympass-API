@@ -2,24 +2,22 @@ import { hash } from "bcryptjs";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { MemoryUsersRepository } from "@/repositories/memory/memory-users-repository.ts";
-import type { UserData } from "@/repositories/users-repository.ts";
-import { UserFactory } from "@/tests/factories/create-user-factory.ts";
+import type { User } from "@/repositories/users-repository.ts";
+import { UserFactory } from "@/tests/factories/create-user-raw-factory.ts";
 import { AuthenticateService } from "../authenticate-service.ts";
 import { InvalidCredentialsError } from "../errors/invalid-credentials-error.ts";
 
 let usersRepository: MemoryUsersRepository;
-let user: UserData;
+let user: User;
 let authenticate: AuthenticateService;
 
 describe("Authenticate test service", () => {
     beforeEach(async () => {
         usersRepository = new MemoryUsersRepository();
 
-        user = await usersRepository.create({
-            name: "John Doe",
-            email: "john.doe@example.com",
-            passwordHash: await hash("123456", 6),
-        });
+        const { user: returning } = await new UserFactory(usersRepository).create();
+
+        user = returning;
 
         authenticate = new AuthenticateService(usersRepository);
     });

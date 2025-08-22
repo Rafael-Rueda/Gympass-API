@@ -1,22 +1,22 @@
 import { hash } from "bcryptjs";
 
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error.ts";
-import type { UserData, UsersRepository } from "@/repositories/users-repository.ts";
+import type { User, UsersRepository } from "@/repositories/users-repository.ts";
 
-interface createUserServiceRequest {
+interface CreateUserServiceRequest {
     name: string;
     email: string;
     password: string;
 }
 
-interface createUserServiceResponse {
-    user: UserData;
+interface CreateUserServiceResponse {
+    user: User;
 }
 
-export class createUserService {
+export class CreateUserService {
     constructor(private usersRepository: UsersRepository) {}
 
-    async execute({ name, email, password }: createUserServiceRequest): Promise<createUserServiceResponse> {
+    async execute({ name, email, password }: CreateUserServiceRequest): Promise<CreateUserServiceResponse> {
         const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
         if (userWithSameEmail) {

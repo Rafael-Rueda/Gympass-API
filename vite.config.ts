@@ -14,7 +14,7 @@ export default defineConfig({
                 "**/generated/**",
                 "**/coverage/**",
                 "**/*.d.ts",
-                "**/prisma/**",
+                "**/.prisma/**",
                 "**/dist/**",
                 "**/src/env/**",
                 "**/src/app.ts",

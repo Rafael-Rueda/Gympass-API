@@ -5,7 +5,7 @@ import { createUserSchema } from "../schemas/create-user-schema.ts";
 
 // Routes are responsible for defining the endpoints of the API and the middleware to be applied to them
 
-export const userRoutes: FastifyPluginAsyncZod = async (app) => {
+export const createUser: FastifyPluginAsyncZod = async (app) => {
     // POST Create User Route
     app.post(
         "/users",

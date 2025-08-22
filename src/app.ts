@@ -11,11 +11,11 @@ import {
 import z from "zod";
 
 import { env } from "./env/index.ts";
-import { authenticateRoutes } from "./http/routes/authenticate.ts";
+import { authenticate } from "./http/routes/authenticate.ts";
 import { InvalidCredentialsError } from "./services/errors/invalid-credentials-error.ts";
 import { ResourceNotFoundError } from "./services/errors/resource-not-found-error.ts";
 import { UserAlreadyExistsError } from "./services/errors/user-already-exists-error.ts";
-import { userRoutes } from "@/http/routes/user-routes.ts";
+import { createUser } from "@/http/routes/create-user.ts";
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 if (env.NODE_ENV === "development") {
@@ -46,8 +46,8 @@ z.config(z.locales.en());
 // Middlewares
 
 // Plugins
-app.register(userRoutes);
-app.register(authenticateRoutes);
+app.register(createUser);
+app.register(authenticate);
 
 // Error handling
 app.setErrorHandler((error, request, reply) => {

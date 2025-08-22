@@ -1,7 +1,7 @@
 import type { Prisma } from "generated/prisma/index.js";
 
 import { prisma } from "@/lib/prisma.ts";
-import { type UserData, UsersRepository } from "../users-repository.ts";
+import { type User, UsersRepository } from "../users-repository.ts";
 
 // Only repositories make the relation with the database
 
@@ -38,9 +38,19 @@ export class PrismaUsersRepository extends UsersRepository {
         return user;
     }
 
-    async findByEmail(email: UserData["email"]) {
+    async findByEmail(email: string) {
         const user = await prisma.user.findUnique({
             where: { email: email },
+        });
+
+        return user;
+    }
+
+    async findById(id: string) {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: id,
+            },
         });
 
         return user;

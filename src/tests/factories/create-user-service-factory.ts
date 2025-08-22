@@ -1,13 +1,13 @@
-import type { UserData, UsersRepository } from "@/repositories/users-repository.ts";
-import { createUserService } from "@/services/create-user-service.ts";
+import type { User, UsersRepository } from "@/repositories/users-repository.ts";
+import { CreateUserService } from "@/services/create-user-service.ts";
 
 export class UserFactory {
-    private users: UserData[] = [];
+    private users: User[] = [];
 
     constructor(private usersRepository: UsersRepository) {}
 
     async create(name?: string, email?: string, password?: string) {
-        const create = new createUserService(this.usersRepository);
+        const create = new CreateUserService(this.usersRepository);
 
         const { user } = await create.execute({
             name: name ?? "John Doe",

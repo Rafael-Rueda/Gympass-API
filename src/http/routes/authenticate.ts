@@ -5,7 +5,7 @@ import { authenticateSchema } from "../schemas/authenticate-schema.ts";
 
 // Routes are responsible for defining the endpoints of the API and the middleware to be applied to them
 
-export const authenticateRoutes: FastifyPluginAsyncZod = async (app) => {
+export const authenticate: FastifyPluginAsyncZod = async (app) => {
     app.post(
         "/sessions",
         {

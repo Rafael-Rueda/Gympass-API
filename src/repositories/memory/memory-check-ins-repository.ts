@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 import { type CheckIn, CheckInsRepository } from "../check-ins-repository.ts";
 
 // Only repositories make the relation with the database
@@ -19,8 +21,15 @@ export class MemoryCheckInsRepository extends CheckInsRepository {
     }
 
     async findByUserIdOnDate(userId: string, date: Date) {
+        // const checkInOnSameDate = this.checkIns.find((checkIn) => {
+        //     return userId === checkIn.userId && checkIn.createdAt.toDateString() === date.toDateString(); // toDateString gets only Date Timestamp (M-D-Y)
+        // });
+
+        const startOfDay = dayjs(date).startOf("day").toDate();
+        const endOfDay = dayjs(date).endOf("day").toDate();
+
         const checkInOnSameDate = this.checkIns.find((checkIn) => {
-            return userId === checkIn.userId && checkIn.createdAt.toDateString() === date.toDateString(); // toDateString gets only Date Timestamp (M-D-Y)
+            return userId === checkIn.userId && checkIn.createdAt >= startOfDay && checkIn.createdAt <= endOfDay;
         });
 
         return checkInOnSameDate || null;

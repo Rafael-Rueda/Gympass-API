@@ -1,7 +1,7 @@
 import type { Prisma } from "generated/prisma/index.js";
 
 import { prisma } from "@/lib/prisma.ts";
-import { type User, UsersRepository } from "../users-repository.ts";
+import { UsersRepository } from "../users-repository.ts";
 
 // Only repositories make the relation with the database
 
@@ -27,7 +27,11 @@ export class PrismaUsersRepository extends UsersRepository {
             },
         });
 
-        return user;
+        if (user) {
+            return user;
+        }
+
+        return null;
     }
 
     async delete(by: { id: string } | { email: string }) {
@@ -35,7 +39,11 @@ export class PrismaUsersRepository extends UsersRepository {
             where: by,
         });
 
-        return user;
+        if (user) {
+            return user;
+        }
+
+        return null;
     }
 
     async findByEmail(email: string) {

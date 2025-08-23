@@ -3,9 +3,9 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { MemoryUsersRepository } from "@/repositories/memory/memory-users-repository.ts";
 import type { User } from "@/repositories/users-repository.ts";
+import { AuthenticateService } from "@/services/authenticate-service.ts";
+import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error.ts";
 import { UserFactory } from "@/tests/factories/create-user-raw-factory.ts";
-import { AuthenticateService } from "../authenticate-service.ts";
-import { InvalidCredentialsError } from "../errors/invalid-credentials-error.ts";
 
 let usersRepository: MemoryUsersRepository;
 let user: User;

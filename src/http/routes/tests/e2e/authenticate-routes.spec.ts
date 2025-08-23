@@ -3,36 +3,38 @@ import request from "supertest";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { app } from "@/app.ts";
+import { env } from "@/env/index.ts";
 import { prisma } from "@/lib/prisma.ts";
 import { PrismaUsersRepository } from "@/repositories/prisma/prisma-users-repository.ts";
 import { UserFactory } from "@/tests/factories/create-user-raw-factory.ts";
 
-describe.skip("Create user test routes", () => {
+describe("Create user test routes", () => {
     beforeAll(async () => {
-        try {
-            execSync("npx prisma migrate dev");
-        } catch {
-            await prisma.user.deleteMany();
+        if (env.NODE_ENV !== "test") {
+            throw new Error("Tests must run in test environment");
         }
 
-        await app.ready();
-    });
+        try {
+            execSync("npx prisma migrate deploy", {
+                stdio: "pipe",
+                env: { DATABASE_URL: env.DATABASE_URL },
+            });
+            await app.ready();
+        } catch (error) {
+            console.error("Migration failed:", error);
+            throw error;
+        }
 
-    beforeEach(async () => {
-        await prisma.user.deleteMany();
+        await new UserFactory(new PrismaUsersRepository()).create();
     });
 
     afterAll(async () => {
-        await prisma.user.deleteMany();
-    });
-
-    afterEach(async () => {
-        await prisma.user.deleteMany();
+        await prisma.$executeRaw`TRUNCATE TABLE "users" CASCADE`;
+        await prisma.$disconnect();
+        await app.close();
     });
 
     it("should be able to authenticate a user that match with the credentials", async () => {
-        await new UserFactory(new PrismaUsersRepository()).create();
-
         const response = await request(app.server).post("/sessions").send({
             email: "john.doe@example.com",
             password: "123456",
@@ -42,8 +44,6 @@ describe.skip("Create user test routes", () => {
     });
 
     it("should not be able to authenticate a user that does not match with the credentials", async () => {
-        await new UserFactory(new PrismaUsersRepository()).create();
-
         const response = await request(app.server).post("/sessions").send({
             email: "john.doe@example.com",
             password: "wrongpassword",

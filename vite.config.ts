@@ -22,5 +22,6 @@ export default defineConfig({
                 "**/*.config.ts",
             ],
         },
+        projects: ["./vite.unit.config.ts", "./vite.e2e.config.ts"],
     },
 });

@@ -21,9 +21,11 @@ export class PrismaCheckInsRepository extends CheckInsRepository {
         const startOfDay = dayjs(date).startOf("day").toDate();
         const endOfDay = dayjs(date).endOf("day").toDate();
 
-        const checkInOnSameDate = await prisma.checkIn.findUnique({
+        const checkInsOnSameDate = await prisma.checkIn.findMany({
             where: { id: userId, createdAt: { gte: startOfDay, lte: endOfDay } },
         });
+
+        const checkInOnSameDate = checkInsOnSameDate[0];
 
         return checkInOnSameDate || null;
     }

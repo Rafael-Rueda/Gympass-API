@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { MemoryUsersRepository } from "@/repositories/memory/memory-users-repository.ts";
 import type { User } from "@/repositories/users-repository.ts";
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error.ts";
+import { GetUserProfileService } from "@/services/get-user-profile-service.ts";
 import { UserFactory } from "@/tests/factories/create-user-raw-factory.ts";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error.ts";
-import { GetUserProfileService } from "../get-user-profile-service.ts";
 
 let usersRepository: MemoryUsersRepository;
 let user: User;

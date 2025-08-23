@@ -25,7 +25,7 @@ export class MemoryUsersRepository extends UsersRepository {
     async update(id: string, data: Partial<Pick<User, "name" | "email" | "passwordHash">>) {
         const user = this.users.find((user) => user.id === id);
         if (!user) {
-            throw new ResourceNotFoundError();
+            return null;
         }
 
         Object.assign(user, data);
@@ -40,7 +40,7 @@ export class MemoryUsersRepository extends UsersRepository {
             user = this.users.find((user) => user.id === by.id);
 
             if (!user) {
-                throw new ResourceNotFoundError();
+                return null;
             }
 
             this.users = this.users.filter((u) => u.id !== user!.id);
@@ -48,7 +48,7 @@ export class MemoryUsersRepository extends UsersRepository {
             user = this.users.find((user) => user.email === by.email);
 
             if (!user) {
-                throw new ResourceNotFoundError();
+                return null;
             }
 
             this.users = this.users.filter((u) => u.email !== user!.email);

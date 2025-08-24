@@ -33,9 +33,10 @@ export class PrismaCheckInsRepository extends CheckInsRepository {
     async findManyByUserId(userId: string, page: number) {
         const limit = 20;
         const checkIns = await prisma.checkIn.findMany({ where: { userId }, skip: (page - 1) * limit, take: limit });
-        const totalPages = (await prisma.checkIn.count()) / limit;
+        const totalRecords = await prisma.checkIn.count({ where: { userId } });
+        const totalPages = Math.ceil(Number(totalRecords / limit));
 
-        return { checkIns, meta: { totalPages, limit, page } };
+        return { checkIns, meta: { totalPages, limit, page, totalRecords } };
     }
 
     async countByUserId(userId: string) {

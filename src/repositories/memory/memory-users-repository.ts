@@ -20,10 +20,11 @@ export class MemoryUsersRepository extends UsersRepository {
 
     async read(page: number) {
         const limit = 20;
-        const users = this.users.slice((page - 1) * 20, page * 20);
-        const totalPages = this.users.length;
+        const users = this.users.slice((page - 1) * limit, page * limit);
+        const totalRecords = this.users.length;
+        const totalPages = Math.ceil(Number(totalRecords / limit));
 
-        return { users, meta: { totalPages, limit, page } };
+        return { users, meta: { totalPages, limit, page, totalRecords } };
     }
 
     async update(id: string, data: Partial<Pick<User, "name" | "email" | "passwordHash">>) {

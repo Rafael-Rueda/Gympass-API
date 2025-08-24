@@ -2,7 +2,12 @@ export interface Coordinate {
     latitude: number;
     longitude: number;
 }
-
+/**
+ *
+ * @param from Distance from
+ * @param to Distance to
+ * @returns The distance between two coordinates (latitude and longitude) in kilometers (KM)
+ */
 export function getDistanceBetweenCoordinates(from: Coordinate, to: Coordinate) {
     if (from.latitude === to.latitude && from.longitude === to.longitude) {
         return 0;

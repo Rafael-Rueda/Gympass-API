@@ -15,9 +15,10 @@ export class PrismaUsersRepository extends UsersRepository {
     async read(page: number) {
         const limit = 20;
         const users = await prisma.user.findMany({ skip: (page - 1) * limit, take: limit });
-        const totalPages = await prisma.user.count();
+        const totalRecords = await prisma.user.count();
+        const totalPages = Math.ceil(Number(totalRecords / limit));
 
-        return { users, meta: { totalPages, limit, page } };
+        return { users, meta: { totalPages, limit, page, totalRecords } };
     }
 
     async update(id: string, data: Prisma.UserUpdateInput) {

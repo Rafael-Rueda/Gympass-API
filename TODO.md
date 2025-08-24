@@ -5,13 +5,13 @@
 - [X] Deve ser possivel se cadastrar
 - [X] Deve ser possivel se autenticar
 - [X] Deve ser possivel obter o perfil de um usuario logado
-- [ ] Deve ser possivel obter o numero de check-ins realizados pelo usuario logado
-- [ ] Deve ser possivel o usuario obter seu historico de check-ins
-- [ ] Deve ser possivel o usuario buscar academias proximas
-- [ ] Deve ser possivel o usuario buscar academias pelo nome
+- [X] Deve ser possivel obter o numero de check-ins realizados pelo usuario logado
+- [X] Deve ser possivel o usuario obter seu historico de check-ins
+- [X] Deve ser possivel o usuario buscar academias proximas
+- [X] Deve ser possivel o usuario buscar academias pelo nome
 - [X] Deve ser possivel o usuario realizar check-in em uma academia
 - [ ] Deve ser possivel validar o check-in de um usuario
-- [ ] Deve ser possivel cadastrar uma academia
+- [X] Deve ser possivel cadastrar uma academia
 
 ## RNs (quando que um RF vai acontecer)
 

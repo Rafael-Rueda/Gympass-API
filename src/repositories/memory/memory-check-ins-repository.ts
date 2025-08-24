@@ -37,12 +37,13 @@ export class MemoryCheckInsRepository extends CheckInsRepository {
 
     async findManyByUserId(userId: string, page: number) {
         const limit = 20;
-        const checkIns = this.checkIns
-            .filter((checkIn) => checkIn.userId === userId)
-            .slice((page - 1) * limit, page * limit);
-        const totalPages = this.checkIns.length / limit;
+        const checkInsRaw = this.checkIns.filter((checkIn) => checkIn.userId === userId);
+        const checkIns = checkInsRaw.slice((page - 1) * limit, page * limit);
 
-        return { checkIns, meta: { totalPages, limit, page } };
+        const totalRecords = checkInsRaw.length;
+        const totalPages = Math.ceil(Number(totalRecords / limit));
+
+        return { checkIns, meta: { totalPages, limit, page, totalRecords } };
     }
 
     async countByUserId(userId: string) {

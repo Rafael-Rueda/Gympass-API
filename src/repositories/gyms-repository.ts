@@ -21,4 +21,8 @@ export abstract class GymsRepository {
     abstract delete(id: string): Promise<Gym | null>;
     abstract findById(id: string): Promise<Gym | null>;
     abstract searchMany(query: string, page: number): Promise<{ gyms: Gym[]; meta: Meta }>;
+    abstract findManyNearby(
+        params: { latitude: number; longitude: number },
+        page: number,
+    ): Promise<{ gyms: Gym[]; meta: Meta }>;
 }

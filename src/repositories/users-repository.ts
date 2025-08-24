@@ -1,3 +1,5 @@
+import type { Meta } from "@/repositories/types/meta-type.ts";
+
 // Generic interface that do not depends on Prisma
 export interface User {
     id: string;
@@ -24,7 +26,7 @@ export interface User {
  */
 export abstract class UsersRepository {
     abstract create(data: Pick<User, "name" | "email" | "passwordHash">): Promise<User>;
-    abstract read(): Promise<User[]>;
+    abstract read(page: number): Promise<{ users: User[]; meta: Meta }>;
     abstract update(id: string, data: Partial<Pick<User, "name" | "email" | "passwordHash">>): Promise<User | null>;
     abstract delete(by: { id: string } | { email: string }): Promise<User | null>;
     abstract findByEmail(email: string): Promise<User | null>;

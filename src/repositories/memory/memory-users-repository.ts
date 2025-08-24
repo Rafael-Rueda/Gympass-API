@@ -18,8 +18,12 @@ export class MemoryUsersRepository extends UsersRepository {
         return user;
     }
 
-    async read() {
-        return this.users;
+    async read(page: number) {
+        const limit = 20;
+        const users = this.users.slice((page - 1) * 20, page * 20);
+        const totalPages = this.users.length;
+
+        return { users, meta: { totalPages, limit, page } };
     }
 
     async update(id: string, data: Partial<Pick<User, "name" | "email" | "passwordHash">>) {

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import type { Prisma } from "generated/prisma/index.js";
 
 import { prisma } from "@/lib/prisma.ts";
-import { type CheckIn, CheckInsRepository } from "../check-ins-repository.ts";
+import { type CheckIn, CheckInsRepository } from "@/repositories/check-ins-repository.ts";
 
 export class PrismaCheckInsRepository extends CheckInsRepository {
     async create(data: Prisma.CheckInUncheckedCreateInput) {
@@ -28,5 +28,20 @@ export class PrismaCheckInsRepository extends CheckInsRepository {
         const checkInOnSameDate = checkInsOnSameDate[0];
 
         return checkInOnSameDate || null;
+    }
+
+    async findManyByUserId(userId: string, page: number) {
+        const limit = 20;
+        const checkIns = await prisma.checkIn.findMany({ where: { userId }, skip: (page - 1) * limit, take: limit });
+        const totalPages = (await prisma.checkIn.count()) / limit;
+
+        return { checkIns, meta: { totalPages, limit, page } };
+    }
+
+    async countByUserId(userId: string) {
+        const checkIns = await prisma.checkIn.findMany({ where: { userId } });
+        const checkInsLength = checkIns.length;
+
+        return checkInsLength;
     }
 }

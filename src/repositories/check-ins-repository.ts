@@ -1,18 +1,4 @@
-import type { Decimal } from "generated/prisma/runtime/library.js";
-
-import type { User } from "./users-repository.ts";
-
-export interface Gym {
-    id: string;
-    name: string;
-    description: string | null;
-    phone: string | null;
-    latitude: Decimal;
-    longitude: Decimal;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
+import type { Meta } from "@/repositories/types/meta-type.ts";
 export interface CheckIn {
     id: string;
     validatedAt: Date | null;
@@ -32,4 +18,6 @@ export interface CheckIn {
 export abstract class CheckInsRepository {
     abstract create(data: Pick<CheckIn, "userId" | "gymId"> & { validatedAt?: Date | null }): Promise<CheckIn>;
     abstract findByUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>;
+    abstract findManyByUserId(userId: string, page: number): Promise<{ checkIns: CheckIn[]; meta: Meta }>;
+    abstract countByUserId(userId: string): Promise<number>;
 }

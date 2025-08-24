@@ -8,12 +8,16 @@ export class PrismaGymsRepository extends GymsRepository {
         return { ...gym, latitude: gym.latitude.toNumber(), longitude: gym.longitude.toNumber() };
     }
 
-    async read(): Promise<Gym[]> {
-        const gyms = await prisma.gym.findMany();
+    async read(page: number) {
+        const limit = 20;
+        const gyms = await prisma.gym.findMany({ skip: (page - 1) * limit, take: limit });
+        const totalPages = (await prisma.gym.count()) / limit;
 
-        return gyms.map((gym) => {
+        const parsedGyms = gyms.map((gym) => {
             return { ...gym, latitude: gym.latitude.toNumber(), longitude: gym.longitude.toNumber() };
         });
+
+        return { gyms: parsedGyms, meta: { totalPages, limit, page } };
     }
 
     async update(id: string, data: Partial<Pick<Gym, "name" | "description" | "phone" | "latitude" | "longitude">>) {
@@ -44,5 +48,26 @@ export class PrismaGymsRepository extends GymsRepository {
         }
 
         return null;
+    }
+
+    async searchMany(query: string, page: number) {
+        const limit = 20;
+        const gyms = await prisma.gym.findMany({
+            where: {
+                OR: [
+                    { name: { contains: query, mode: "insensitive" } },
+                    { description: { contains: query, mode: "insensitive" } },
+                ],
+            },
+            skip: (page - 1) * 20,
+            take: 20,
+        });
+        const totalPages = await prisma.gym.count();
+
+        const parsedGyms = gyms.map((gym) => {
+            return { ...gym, latitude: gym.latitude.toNumber(), longitude: gym.longitude.toNumber() };
+        });
+
+        return { gyms: parsedGyms, meta: { totalPages, limit, page } };
     }
 }

@@ -15,8 +15,13 @@ export class MemoryGymsRepository extends GymsRepository {
         return gym;
     }
 
-    async read() {
-        return this.gyms;
+    async read(page: number) {
+        const limit = 20;
+        const gyms = this.gyms.slice((page - 1) * 20, page * 20);
+
+        const totalPages = this.gyms.length / limit;
+
+        return { gyms, meta: { totalPages, limit, page } };
     }
 
     async update(id: string, data: Partial<Pick<Gym, "name" | "description" | "phone" | "latitude" | "longitude">>) {
@@ -55,5 +60,20 @@ export class MemoryGymsRepository extends GymsRepository {
         });
 
         return gym || null;
+    }
+
+    async searchMany(query: string, page: number) {
+        const limit = 20;
+        const gyms = this.gyms
+            .filter((gym) => {
+                return (
+                    gym.name.toLowerCase().includes(query.toLowerCase()) ||
+                    gym.description?.toLowerCase().includes(query.toLowerCase())
+                );
+            })
+            .slice((page - 1) * limit, page * limit);
+        const totalPages = this.gyms.length / limit;
+
+        return { gyms, meta: { totalPages, limit, page } };
     }
 }

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-import { type CheckIn, CheckInsRepository } from "../check-ins-repository.ts";
+import { type CheckIn, CheckInsRepository } from "@/repositories/check-ins-repository.ts";
 
 // Only repositories make the relation with the database
 
@@ -33,5 +33,22 @@ export class MemoryCheckInsRepository extends CheckInsRepository {
         });
 
         return checkInOnSameDate || null;
+    }
+
+    async findManyByUserId(userId: string, page: number) {
+        const limit = 20;
+        const checkIns = this.checkIns
+            .filter((checkIn) => checkIn.userId === userId)
+            .slice((page - 1) * limit, page * limit);
+        const totalPages = this.checkIns.length / limit;
+
+        return { checkIns, meta: { totalPages, limit, page } };
+    }
+
+    async countByUserId(userId: string) {
+        const checkIns = this.checkIns.filter((checkIn) => checkIn.userId === userId);
+        const checkInsLength = checkIns.length;
+
+        return checkInsLength;
     }
 }
